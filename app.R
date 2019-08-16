@@ -1,30 +1,35 @@
 # SAGE Path Participating Journals
 
 library(shiny)
+library(shinythemes)
 library(tidyverse)
 library(DT)
 
-
 ui <- fluidPage(
-  titlePanel(title = "SAGE Path Participating Journals"),
-  img(src = "logo.png", align = "left", width = "250"),
-  DTOutput("participatingjournals")
-)
+  titlePanel("SAGE Path Participating Journals"),
+  mainPanel(
+    fluidRow(img(src = "logo.png", align = "left", width = "250")),
+    fluidRow(p("example text"), column(1)),
+    fluidRow(DTOutput("participatingjournals"))
+    )
+  ) 
 
 server <- function(input, output) {
-  
   participatingjournals <- read.csv("participatingjournals.csv")
   participatingjournals <- participatingjournals[participatingjournals$SAGE.Path.Status == "Included",]
   participatingjournals <- subset(participatingjournals, select = -c(TLA, 
                                                                      SPIN.Major.Disciplines.Combined,
                                                                      SAGE.Path.Status))
   colnames(participatingjournals) <- c("Journal", "Primary Discipline", "Impact Factor?", "Other Indexing",
-                                       "Open Access?","APC, IF OA")
+                                       "Gold Open Access?","APC, IF OA")
 
   output$participatingjournals <- renderDT({
-    datatable(participatingjournals, filter = "top", 
+    datatable(participatingjournals,
               options = list(pageLength = nrow(participatingjournals), 
-                             lengthChange = FALSE), rownames = FALSE)
+                             lengthChange = FALSE), 
+              rownames = FALSE,
+              escape = 2,
+              filter = "none")
   })
   
 }
