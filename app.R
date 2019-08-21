@@ -25,11 +25,14 @@ server <- function(input, output) {
 
   output$participatingjournals <- renderDT({
     datatable(participatingjournals,
-              options = list(pageLength = nrow(participatingjournals), 
-                             lengthChange = FALSE), 
+              options = list(
+                pageLength = nrow(participatingjournals), 
+                  lengthChange = FALSE,
+                columnDefs = list(list(searchable = FALSE, targets = 0))
+                ),
               rownames = FALSE,
               escape = 2,
-              filter = "none")
+              filter = "top")
   })
   
 }
